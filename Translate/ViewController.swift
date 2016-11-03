@@ -16,6 +16,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     var languageArray = ["French", "Turkish", "Irish"]
     
+    
+    var languageCode: [String: String] = ["en": "English", "fr": "French", "tr": "Turkish", "ga": "Irish"] //Key: Value
+    
     //var data = NSMutableData()
     
     override func viewDidLoad() {
@@ -23,6 +26,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         languagePicker.delegate = self
         languagePicker.dataSource = self
+        
+        
+        textToTranslate.text = "Enter text to translate"
+        textToTranslate.textColor = UIColor.lightGray
+        
             }
     
     override func didReceiveMemoryWarning() {
@@ -36,6 +44,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         textToTranslate.resignFirstResponder()
     }
     
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return languageArray[row]
     }
@@ -44,10 +53,26 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
          return languageArray.count 
     }
     
+    func textToTranslateDidBeginEditing(textView: UITextView)
+    {
+        if textToTranslate.textColor == UIColor.lightGray
+        {
+            textToTranslate.text = nil
+            textToTranslate.textColor = UIColor.black
+        }
+    }
+    
+    func textToTranslateDidEndEditing(textView: UITextView)
+    {
+        if textToTranslate.text.isEmpty{
+            textToTranslate.text = "Enter text to translate"
+            textView.textColor = UIColor.lightGray
+        }
+    }
     
     
     
-    
+    var preferredLanguage = NSLocale.current.languageCode
     
     
     
@@ -56,7 +81,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let str = textToTranslate.text
         let escapedStr = str?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         
-        let langStr = ("en|fr").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let langStr = (preferredLanguage! + "|fr").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         
         let urlStr:String = ("https://api.mymemory.translated.net/get?q="+escapedStr!+"&langpair="+langStr!)
         
