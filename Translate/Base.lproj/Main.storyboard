@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -31,15 +31,39 @@
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tk9-7M-DEK">
-                                <frame key="frameInset" minX="155.5" minY="546" width="64" height="30"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="92x-bu-8Kp">
+                                <frame key="frameInset" minX="156" minY="546" width="64" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Translate"/>
-                            </button>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tk9-7M-DEK">
+                                        <frame key="frameInset" width="64" height="30"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Translate"/>
+                                        <connections>
+                                            <action selector="translate:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0w0-xY-Tsv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lBT-KI-z70">
+                                <frame key="frameInset" minX="37" minY="360" height="150" maxX="38"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="I1K-xc-CDq"/>
+                                </connections>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="lBT-KI-z70" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="Nff-pf-Aib"/>
+                            <constraint firstItem="lBT-KI-z70" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="RId-bO-hel"/>
+                            <constraint firstItem="lBT-KI-z70" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="enm-35-7Xw"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="languagePicker" destination="lBT-KI-z70" id="L8x-2R-pxd"/>
+                        <outlet property="textToTranslate" destination="dii-Vg-90N" id="u6Z-c9-yOS"/>
+                        <outlet property="translatedText" destination="LaV-KV-DTJ" id="Xzh-Ej-Y5o"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

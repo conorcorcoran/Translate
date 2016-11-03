@@ -8,22 +8,48 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
     
     @IBOutlet weak var textToTranslate: UITextView!
     @IBOutlet weak var translatedText: UITextView!
+    @IBOutlet weak var languagePicker: UIPickerView!
+    
+    var languageArray = ["French", "Turkish", "Irish"]
     
     //var data = NSMutableData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    }
+        languagePicker.delegate = self
+        languagePicker.dataSource = self
+            }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
+        textToTranslate.resignFirstResponder()
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return languageArray[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+         return languageArray.count 
+    }
+    
+    
+    
+    
+    
+    
+    
     
     @IBAction func translate(_ sender: AnyObject) {
         
@@ -68,5 +94,10 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int
+    {
+        return 1
+    }
+    
 }
-
