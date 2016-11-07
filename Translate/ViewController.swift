@@ -74,6 +74,27 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     var preferredLanguage = NSLocale.current.languageCode
     
+    var translatingLanguage = ""
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        if(row == 0)
+        {
+         translatingLanguage = "fr"
+        }
+        else if(row == 1)
+        {
+          translatingLanguage = "tr"
+        }
+        else if(row == 2)
+        {
+         translatingLanguage = "ga"
+        }
+        else
+        {
+           translatingLanguage = "en"
+        }
+    }
     
     
     @IBAction func translate(_ sender: AnyObject) {
@@ -81,7 +102,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let str = textToTranslate.text
         let escapedStr = str?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         
-        let langStr = (preferredLanguage! + "|fr").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let langStr = (preferredLanguage! + "|" + translatingLanguage).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        
+        let session = URLSession.shared
         
         let urlStr:String = ("https://api.mymemory.translated.net/get?q="+escapedStr!+"&langpair="+langStr!)
         
@@ -89,7 +112,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         let request = URLRequest(url: url!)// Creating Http Request
         
-        //var data = NSMutableData()var data = NSMutableData()
+        //var data = NSMutableData();var data = NSMutableData()
+        
         
         let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         indicator.center = view.center
@@ -98,11 +122,12 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         var result = "<Translation Error>"
         
-        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
+        let dataTask = session.dataTask(with: request) { ( data:Data?,response:URLResponse?, error:Error?) -> Void in
+        //NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
             
             indicator.stopAnimating()
             
-            if let httpResponse = response as? HTTPURLResponse {
+            //if let httpResponse = response as? HTTPURLResponse {
                 if(httpResponse.statusCode == 200){
                     
                     let jsonDict: NSDictionary!=(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as! NSDictionary
