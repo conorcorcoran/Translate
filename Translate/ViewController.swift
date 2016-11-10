@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
     
     @IBOutlet weak var textToTranslate: UITextView!
@@ -29,7 +30,10 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         
         textToTranslate.text = "Enter text to translate"
-        textToTranslate.textColor = UIColor.lightGray
+        textToTranslate.textColor = UIColor.black
+        textToTranslate.font = UIFont(name: "Palatino", size: 17)
+        
+        
         
             }
     
@@ -65,14 +69,17 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func textToTranslateDidEndEditing(textView: UITextView)
     {
         if textToTranslate.text.isEmpty{
-            textToTranslate.text = "Enter text to translate"
-            textView.textColor = UIColor.lightGray
+            textView.textColor = UIColor.black
         }
     }
     
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let attributedString = NSAttributedString(string: languageArray[row], attributes: [NSForegroundColorAttributeName : UIColor.white])
+        return attributedString
+    }
     
     
-    var preferredLanguage = NSLocale.current.languageCode
+    var preferredLanguage = NSLocale.current.languageCode!
     
     var translatingLanguage = ""
     
@@ -102,9 +109,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         let str = textToTranslate.text
         let escapedStr = str?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         
-        let langStr = (preferredLanguage! + "|" + translatingLanguage).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-        
-        let session = URLSession.shared
+        let langStr = (preferredLanguage + "|" + translatingLanguage).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
         
         let urlStr:String = ("https://api.mymemory.translated.net/get?q="+escapedStr!+"&langpair="+langStr!)
         
@@ -112,22 +117,18 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         let request = URLRequest(url: url!)// Creating Http Request
         
-        //var data = NSMutableData();var data = NSMutableData()
+        //var data = NSMutableData()var data = NSMutableData()
         
         
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        indicator.center = view.center
-        view.addSubview(indicator)
-        indicator.startAnimating()
+        EZLoadingActivity.show("Translating...", disableUI: true)
         
         var result = "<Translation Error>"
         
-        let dataTask = session.dataTask(with: request) { ( data:Data?,response:URLResponse?, error:Error?) -> Void in
-        //NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
+        NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) { response, data, error in
             
-            indicator.stopAnimating()
+           EZLoadingActivity.hide(true, animated: true)
             
-            //if let httpResponse = response as? HTTPURLResponse {
+            if let httpResponse = response as? HTTPURLResponse {
                 if(httpResponse.statusCode == 200){
                     
                     let jsonDict: NSDictionary!=(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as! NSDictionary
